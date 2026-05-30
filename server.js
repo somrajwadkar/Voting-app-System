@@ -18,3 +18,8 @@ app.use('/candidate', candidateRoutes);
 app.listen(PORT, ()=>{
     console.log('listening on port 3000');
 })
+
+
+ //git add .
+// git commit -m "Describe your changes"
+// git push origin main

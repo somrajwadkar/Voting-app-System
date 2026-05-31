@@ -3,6 +3,13 @@ const router = express.Router();
 const User = require('../models/user');
 
 
+
+
+
+const checkAdminRole = async (userID) => {
+   
+}
+
 router.post('/', jwtAuthMiddleware, async (req, res) =>{
     try{
         if(!(await checkAdminRole(req.user.id)))

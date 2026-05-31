@@ -37,3 +37,21 @@ router.post('/', jwtAuthMiddleware, async (req, res) =>{
         res.status(500).json({error: 'Internal Server Error'});
     }
 })
+
+router.put('/:candidateID', jwtAuthMiddleware, async (req, res)=>{
+    try{
+        if(!(await checkAdminRole(req.user.id)))
+            return res.status(403).json({message: 'user does not have admin role'});
+        
+
+        if (!response) {
+            return res.status(404).json({ error: 'Candidate not found' });
+        }
+
+        console.log('candidate data updated');
+        res.status(200).json(response);
+    }catch(err){
+        console.log(err);
+        res.status(500).json({error: 'Internal Server Error'});
+    }
+})

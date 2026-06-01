@@ -40,9 +40,16 @@ router.post('/', jwtAuthMiddleware, async (req, res) =>{
 
 router.put('/:candidateID', jwtAuthMiddleware, async (req, res)=>{
     try{
-        if(!(await checkAdminRole(req.user.id)))
+        if(!checkAdminRole(req.user.id))
             return res.status(403).json({message: 'user does not have admin role'});
         
+        const candidateID = req.params.candidateID; // Extract the id from the URL parameter
+        const updatedCandidateData = req.body; // Updated data for the person
+
+        const response = await Candidate.findByIdAndUpdate(candidateID, updatedCandidateData, {
+            new: true, // Return the updated document
+            runValidators: true, // Run Mongoose validation
+        })
 
         if (!response) {
             return res.status(404).json({ error: 'Candidate not found' });

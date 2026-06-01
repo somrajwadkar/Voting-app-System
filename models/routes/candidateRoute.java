@@ -43,8 +43,9 @@ router.put('/:candidateID', jwtAuthMiddleware, async (req, res)=>{
         if(!checkAdminRole(req.user.id))
             return res.status(403).json({message: 'user does not have admin role'});
         
-        const candidateID = req.params.candidateID; // Extract the id from the URL parameter
-        const updatedCandidateData = req.body; // Updated data for the person
+        const candidateID = req.params.candidateID;
+
+        const updateCandidateData = req.body;
 
         const response = await Candidate.findByIdAndUpdate(candidateID, updatedCandidateData, {
             new: true, // Return the updated document
@@ -93,7 +94,7 @@ router.get('/vote/:candidateID', jwtAuthMiddleware, async (req, res)=>{
     userId = req.user.id;
 
     try{
-        // Find the Candidate document with the specified candidateID
+        
         const candidate = await Candidate.findById(candidateID);
         if(!candidate){
             return res.status(404).json({ message: 'Candidate not found' });
@@ -116,7 +117,7 @@ router.get('/vote/:candidateID', jwtAuthMiddleware, async (req, res)=>{
         await candidate.save();
 
         // update the user document
-        user.isVoted = true
+        user.isVoted = true;
         await user.save();
 
         return res.status(200).json({ message: 'Vote recorded successfully' });

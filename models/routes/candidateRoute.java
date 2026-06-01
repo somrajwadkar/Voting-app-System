@@ -62,3 +62,15 @@ router.put('/:candidateID', jwtAuthMiddleware, async (req, res)=>{
         res.status(500).json({error: 'Internal Server Error'});
     }
 })
+
+router.delete('/:candidateID', jwtAuthMiddleware, async (req, res)=>{
+    try{
+        
+
+        console.log('candidate deleted');
+        res.status(200).json(response);
+    }catch(err){
+        console.log(err);
+        res.status(500).json({error: 'Internal Server Error'});
+    }
+})

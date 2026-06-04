@@ -19,6 +19,9 @@ app.listen(PORT, ()=>{
     console.log('listening on port 3000');
 })
 
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+});
 
  //git add .
 // git commit -m "Describe your changes"

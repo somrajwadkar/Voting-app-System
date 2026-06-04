@@ -22,3 +22,9 @@ db.on('connected', () => {
 db.on('error', (err) => {
     console.error('MongoDB connection error:', err);
 });
+
+db.on('disconnected', () => {
+    console.log('Disconnected from MongoDB server');
+});
+
+module.exports = db;    

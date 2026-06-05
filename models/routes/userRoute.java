@@ -1,3 +1,9 @@
+const express = require('express');
+const router = express.Router();
+const User = require('./../models/user');
+const {jwtAuthMiddleware, generateToken} = require('./../jwt');
+
+
 router.post('/signup', async (req, res) =>{
     try{
         const data = req.body // Assuming the request body contains the User data

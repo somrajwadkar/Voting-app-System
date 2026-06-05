@@ -1,25 +1,33 @@
 const jwt = require('jsonwebtoken');
 
-const secretKey = 'your_secret_key'; // Replace with your actual secret key
+const jwtAuthMiddleware = (req, res, next) => {
 
-// Function to generate a JWT token
-function generateToken(payload) {
-    return jwt.sign(payload, secretKey, { expiresIn: '1h' }); // Token expires in 1 hour
+    // first check request headers has authorization or not
+    const authorization = req.headers.authorization
+    if(!authorization) return res.status(401).json({ error: 'Token Not Found' });
+
+    // Extract the jwt token 
+    const token = req.headers.authorization.split(' ')[1];
+    if(!token) return res.status(401).json({ error: 'Unauthorized' });
+
+    try{
+      
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        // Attach user information to the request object
+        req.user = decoded
+        next();
+    }catch(err){
+        console.error(err);
+        res.status(401).json({ error: 'Invalid token' });
+    }
 }
 
-// Function to verify a JWT token
-function verifyToken(token) {
-    try {
-        return jwt.verify(token, secretKey);
-    } catch (err) {
-        return null; // Invalid token
-    }   
 
-
-module.exports = {
-    generateToken,
-    verifyToken
-};      
-
-
+// Function to generate JWT token
+const generateToken = (userData) => {
+    // Generate a new JWT token using user data
+    return jwt.sign(userData, process.env.JWT_SECRET, {expiresIn: 30000});
 }
+
+module.exports = {jwtAuthMiddleware, generateToken};

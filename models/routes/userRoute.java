@@ -64,13 +64,7 @@ router.post('/login', async(req, res) => {
             return res.status(401).json({error: 'Invalid Aadhar Card Number or Password'});
         }
 
-        // generate Token 
-        const payload = {
-            id: user.id,
-        }
-        const token = generateToken(payload);
-
-        // resturn token as response
+        
         res.json({token})
     }catch(err){
         console.error(err);

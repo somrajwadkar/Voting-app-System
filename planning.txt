@@ -37,8 +37,3 @@ Vote Counts:
 User Profile:
     /profile: GET - Get the user's profile information.
     /profile/password: PUT - Change the user's password.
-
-Admin Candidate Management:
-    /candidates: POST - Create a new candidate.
-    /candidates/:candidateId: PUT - Update an existing candidate.
-    /candidates/:candidateId: DELETE - Delete a candidate from the list.

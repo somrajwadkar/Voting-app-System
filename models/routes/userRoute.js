@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const User = require('./../models/user');
-const {jwtAuthMiddleware, generateToken} = require('./../jwt');
+const User = require('../user');
+const {jwtAuthMiddleware, generateToken} = require('../../JWT');
 
 
 router.post('/signup', async (req, res) =>{
@@ -64,7 +64,10 @@ router.post('/login', async(req, res) => {
             return res.status(401).json({error: 'Invalid Aadhar Card Number or Password'});
         }
 
-        
+        const payload = {
+            id: user.id
+        }
+        const token = generateToken(payload);
         res.json({token})
     }catch(err){
         console.error(err);

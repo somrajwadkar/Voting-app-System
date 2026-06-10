@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express();
-const db = require('./db');
+require('./DB');
 require('dotenv').config();
 
 const bodyParser = require('body-parser'); 
@@ -8,8 +8,8 @@ app.use(bodyParser.json()); // req.body
 const PORT = process.env.PORT || 3000;
 
 // Import the router files
-const userRoutes = require('./routes/userRoutes');
-const candidateRoutes = require('./routes/candidateRoutes');
+const userRoutes = require('./models/routes/userRoute');
+const candidateRoutes = require('./models/routes/candidateRoute');
 
 // Use the routers
 app.use('/user', userRoutes);

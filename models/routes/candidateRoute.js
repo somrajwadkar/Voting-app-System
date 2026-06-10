@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/user');
-const {jwtAuthMiddleware, generateToken} = require('../jwt');
-const Candidate = require('../models/candidate');
+const User = require('../user');
+const {jwtAuthMiddleware, generateToken} = require('../../JWT');
+const Candidate = require('../candidate');
 
 
 const checkAdminRole = async (userID) => {
@@ -45,7 +45,7 @@ router.put('/:candidateID', jwtAuthMiddleware, async (req, res)=>{
         
         const candidateID = req.params.candidateID;
 
-        const updateCandidateData = req.body;
+        const updatedCandidateData = req.body;
 
         const response = await Candidate.findByIdAndUpdate(candidateID, updatedCandidateData, {
             new: true, // Return the updated document
@@ -90,8 +90,8 @@ router.get('/vote/:candidateID', jwtAuthMiddleware, async (req, res)=>{
     // no admin can vote
     // user can only vote once
     
-    candidateID = req.params.candidateID;
-    userId = req.user.id;
+    const candidateID = req.params.candidateID;
+    const userId = req.user.id;
 
     try{
         

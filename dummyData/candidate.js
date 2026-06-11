@@ -23,5 +23,17 @@
         "name": "Yogi Adityanath",
         "party": "BJP",
         "age": 49
+    },
+
+    {
+        "name": "K Chandrashekar Rao",
+        "party": "TRS",
+        "age": 66
+    },
+
+    {
+        "name": "Nitish Kumar",
+        "party": "JD(U)",
+        "age": 70
     }
 ]

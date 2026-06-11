@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../user');
-const {jwtAuthMiddleware, generateToken} = require('../../JWT');
+const User = require('./../models/user');
+const {jwtAuthMiddleware, generateToken} = require('./../jwt');
 
-
+// POST route to add a person
 router.post('/signup', async (req, res) =>{
     try{
         const data = req.body // Assuming the request body contains the User data
@@ -46,6 +46,7 @@ router.post('/signup', async (req, res) =>{
     }
 })
 
+// Login Route
 router.post('/login', async(req, res) => {
     try{
         // Extract aadharCardNumber and password from request body
@@ -64,10 +65,13 @@ router.post('/login', async(req, res) => {
             return res.status(401).json({error: 'Invalid Aadhar Card Number or Password'});
         }
 
+        // generate Token 
         const payload = {
-            id: user.id
+            id: user.id,
         }
         const token = generateToken(payload);
+
+        // resturn token as response
         res.json({token})
     }catch(err){
         console.error(err);
@@ -75,23 +79,19 @@ router.post('/login', async(req, res) => {
     }
 });
 
-router.get('/profile', jwtAuthMiddleware, async (req, res) => {
-    try{
-        const userData = req.user;
-        const userId = userData.id;
-        const user = await User.findById(userId);
-        res.status(200).json({user});
-    }catch(err){
-        console.error(err);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-})
+
 
 router.put('/profile/password', jwtAuthMiddleware, async (req, res) => {
     try {
         const userId = req.user.id; // Extract the id from the token
         const { currentPassword, newPassword } = req.body; // Extract current and new passwords from request body
 
+        // Check if currentPassword and newPassword are present in the request body
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({ error: 'Both currentPassword and newPassword are required' });
+        }
+
+        // Find the user by userID
         const user = await User.findById(userId);
 
         // If user does not exist or password does not match, return error
@@ -115,3 +115,24 @@ module.exports = router;
 
 
 
+
+
+router.get('/vote/count', async (req, res) => {
+    try{
+        // Find all candidates and sort them by voteCount in descending order
+        const candidate = await Candidate.find().sort({voteCount: 'desc'});
+
+        // Map the candidates to only return their name and voteCount
+        const voteRecord = candidate.map((data)=>{
+            return {
+                party: data.party,
+                count: data.voteCount
+            }
+        });
+
+        return res.status(200).json(voteRecord);
+    }catch(err){
+        console.log(err);
+        res.status(500).json({error: 'Internal Server Error'});
+    }
+});
